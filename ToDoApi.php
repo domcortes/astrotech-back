@@ -9,7 +9,7 @@ class TodoAPI {
     }
 
     public function getAllTodos() {
-        $query = "SELECT * FROM to_do";
+        $query = "SELECT id as id, task_name as name, done as done FROM to_do";
         $result = $this->connection->getConnection()->query($query);
 
         $todos = [];
