@@ -13,8 +13,9 @@ $mysqli = $databaseConnection->getConnection();
 
 if ($mysqli) {
     $connection = new DatabaseConnection();
+    $migration = new TodoMigration($connection);
     $api = new TodoAPI($connection);
-    $router = new Router($api);
+    $router = new Router($api, $migration);
     $router->route();
 } else {
     http_response_code(500);

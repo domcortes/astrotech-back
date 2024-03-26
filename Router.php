@@ -1,19 +1,31 @@
 <?php
 require_once 'ToDoApi.php';
+require_once 'ToDoMigration.php';
 
-class Router {
+class Router
+{
     private $api;
+    private $migration;
 
-    public function __construct(TodoAPI $api) {
+    public function __construct(TodoAPI $api, TodoMigration $migration)
+    {
         $this->api = $api;
+        $this->migration = $migration;
     }
 
-    public function route() {
+    public function route()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(200);
+            return;
+        }
+
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
-                if (isset($_GET['id'])) {
+                if (isset ($_GET['id'])) {
                     echo $this->api->getTodoById($_GET['id']);
                 } else {
+                    $this->migration->migrate();
                     echo $this->api->getAllTodos();
                 }
                 break;
@@ -38,3 +50,4 @@ class Router {
         }
     }
 }
+?>
