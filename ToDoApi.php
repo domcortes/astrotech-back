@@ -64,7 +64,8 @@ class TodoAPI
     public function updateTodo($id, $data)
     {
         try {
-            $hecha = $data['done'] ? 1 : 0;
+            var_dump($data);
+            $hecha = $data->done ? 1 : 0;
     
             $query = "UPDATE to_do SET done = $hecha WHERE id = $id";
             $result = $this->connection->getConnection()->query($query);

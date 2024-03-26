@@ -36,8 +36,9 @@ class Router
             case 'PUT':
                 parse_str(file_get_contents("php://input"), $_PUT);
                 $id = $_GET['id'];
-                $data = $_PUT;
-                echo $this->api->updateTodo($id, $data);
+                $json_data = key($_PUT);
+                $json_data = str_replace('_', '', $json_data);
+                echo $this->api->updateTodo($id, json_decode($json_data));
                 break;
             case 'DELETE':
                 parse_str(file_get_contents("php://input"), $_DELETE);
