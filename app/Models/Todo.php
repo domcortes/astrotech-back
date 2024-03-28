@@ -1,18 +1,19 @@
 <?php
+
 namespace App\Models;
 
 use App\Database\DatabaseConnection;
 
 class ToDo
 {
-    private $connection;
+    private DatabaseConnection $connection;
 
     public function __construct(DatabaseConnection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $query = "SELECT * FROM to_do";
         $result = $this->connection->getConnection()->query($query);
@@ -27,7 +28,7 @@ class ToDo
         return $todos;
     }
 
-    public function getById($id)
+    public function getById($id): ?array
     {
         try {
             $query = "SELECT * FROM to_do WHERE id = $id";
@@ -40,10 +41,11 @@ class ToDo
             }
         } catch (\Throwable $th) {
             echo "Get by id error" . $th->getMessage();
+            return null;
         }
     }
 
-    public function create($data)
+    public function create(array $data): bool
     {
         try {
             $nombre = $data['task_name'];
@@ -54,24 +56,26 @@ class ToDo
             return $result;
         } catch (\Throwable $th) {
             echo "Error creating " . $th->getMessage();
+            return false;
         }
     }
 
-    public function update($id, $data)
+    public function update(int $id, object $data): bool
     {
         try {
             $hecha = $data->done ? 1 : 0;
-    
+
             $query = "UPDATE to_do SET done = $hecha WHERE id = $id";
             $result = $this->connection->getConnection()->query($query);
-    
+
             return $result;
         } catch (\Throwable $th) {
             echo "Error updating: " . $th->getMessage();
+            return false;
         }
     }
 
-    public function delete($id)
+    public function delete(int $id): bool
     {
         try {
             $query = "DELETE FROM to_do WHERE id = $id";
@@ -80,6 +84,7 @@ class ToDo
             return $result;
         } catch (\Throwable $th) {
             echo 'Error deleting ' . $th->getMessage();
+            return false;
         }
     }
 }

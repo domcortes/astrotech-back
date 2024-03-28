@@ -9,13 +9,13 @@ use App\Models\ToDo;
 use App\Http\Headers;
 
 class Main {
-    public function main(){
+    public function main(): void {
         Headers::setHeaders();
     
         $databaseConnection = new DatabaseConnection();
         $mysqli = $databaseConnection->getConnection();
         
-        if ($mysqli) {
+        if ($mysqli instanceof mysqli) {
             $toDoModel = new ToDo($databaseConnection);
             $migration = new ToDoMigration($databaseConnection);
             $api = new TodoApiController($toDoModel);

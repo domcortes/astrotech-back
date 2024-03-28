@@ -1,30 +1,31 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\ToDo;
 
 class TodoApiController
 {
-    private $toDoModel;
+    private ToDo $toDoModel;
 
     public function __construct(ToDo $toDoModel)
     {
         $this->toDoModel = $toDoModel;
     }
 
-    public function getAllTodos()
+    public function getAllTodos(): string
     {
         $todos = $this->toDoModel->getAll();
         return json_encode($todos);
     }
 
-    public function getTodoById($id)
+    public function getTodoById(int $id): string
     {
         $todo = $this->toDoModel->getById($id);
         return json_encode($todo);
     }
 
-    public function createTodo($data)
+    public function createTodo(array $data): string
     {
         $result = $this->toDoModel->create($data);
         if ($result) {
@@ -34,7 +35,7 @@ class TodoApiController
         }
     }
 
-    public function updateTodo($id, $data)
+    public function updateTodo(int $id, object $data): string
     {
         $result = $this->toDoModel->update($id, $data);
         if ($result) {
@@ -44,7 +45,7 @@ class TodoApiController
         }
     }
 
-    public function deleteTodo($id)
+    public function deleteTodo(int $id): string
     {
         $result = $this->toDoModel->delete($id);
         if ($result) {
@@ -54,4 +55,3 @@ class TodoApiController
         }
     }
 }
-?>

@@ -1,21 +1,24 @@
 <?php
+
 namespace App\Database;
+
 use Dotenv\Dotenv;
+use mysqli;
 
 class DatabaseConnection
 {
-    private $db_host;
-    private $db_user;
-    private $db_password;
-    private $db_db;
-    private $mysqli;
+    private string $db_host;
+    private string $db_user;
+    private string $db_password;
+    private string $db_db;
+    private mysqli $mysqli;
 
     const DEEP_LEVEL_DIR = 2;
     const DIR = __DIR__;
 
     public function __construct()
     {
-        $dirName = dirname(self::DIR,self::DEEP_LEVEL_DIR);
+        $dirName = dirname(self::DIR, self::DEEP_LEVEL_DIR);
 
         $dotenv = Dotenv::createImmutable($dirName);
         $dotenv->load();
@@ -31,9 +34,9 @@ class DatabaseConnection
         $this->connect();
     }
 
-    private function connect()
+    private function connect(): void
     {
-        $this->mysqli = new \mysqli(
+        $this->mysqli = new mysqli(
             $this->db_host,
             $this->db_user,
             $this->db_password,
@@ -45,15 +48,13 @@ class DatabaseConnection
         }
     }
 
-    public function getConnection()
+    public function getConnection(): mysqli
     {
         return $this->mysqli;
     }
 
-    public function closeConnection()
+    public function closeConnection(): void
     {
         $this->mysqli->close();
     }
-
-
 }
