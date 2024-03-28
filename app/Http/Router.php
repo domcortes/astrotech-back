@@ -46,11 +46,6 @@ class Router
                     return;
                 }
                 
-                if (count($data) !== 1) {
-                    http_response_code(400);
-                    echo json_encode(['error' => 'Only task_name field is allowed']);
-                    return;
-                }
                 echo $this->api->createTodo($data);
                 break;
             case 'PUT':
