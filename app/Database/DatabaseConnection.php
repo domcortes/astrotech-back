@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
+namespace App\Database;
+use Dotenv\Dotenv;
 
 class DatabaseConnection
 {
@@ -9,9 +10,14 @@ class DatabaseConnection
     private $db_db;
     private $mysqli;
 
+    const DEEP_LEVEL_DIR = 2;
+    const DIR = __DIR__;
+
     public function __construct()
     {
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+        $dirName = dirname(self::DIR,self::DEEP_LEVEL_DIR);
+
+        $dotenv = Dotenv::createImmutable($dirName);
         $dotenv->load();
         $databaseHost = $_ENV['DATABASE_HOST'];
         $databaseUser = $_ENV['DATABASE_USER'];
@@ -27,7 +33,7 @@ class DatabaseConnection
 
     private function connect()
     {
-        $this->mysqli = new mysqli(
+        $this->mysqli = new \mysqli(
             $this->db_host,
             $this->db_user,
             $this->db_password,
@@ -35,7 +41,7 @@ class DatabaseConnection
         );
 
         if ($this->mysqli->connect_error) {
-            die ('Errno: ' . $this->mysqli->connect_errno . '<br>' . 'Error: ' . $this->mysqli->connect_error);
+            die('Errno: ' . $this->mysqli->connect_errno . '<br>' . 'Error: ' . $this->mysqli->connect_error);
         }
     }
 

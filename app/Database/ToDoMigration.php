@@ -1,5 +1,6 @@
 <?php
-class TodoMigration {
+namespace App\Database;
+class ToDoMigration {
     private $connection;
 
     public function __construct(DatabaseConnection $connection) {

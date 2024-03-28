@@ -1,13 +1,15 @@
 <?php
-require_once 'ToDoApi.php';
-require_once 'ToDoMigration.php';
+namespace App\Http;
+
+use App\Database\TodoMigration;
+use App\Http\Controllers\TodoApiController;
 
 class Router
 {
     private $api;
     private $migration;
 
-    public function __construct(TodoAPI $api, TodoMigration $migration)
+    public function __construct(TodoApiController $api, TodoMigration $migration)
     {
         $this->api = $api;
         $this->migration = $migration;

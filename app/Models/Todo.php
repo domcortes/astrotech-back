@@ -1,7 +1,9 @@
 <?php
-require_once 'Database.php';
+namespace App\Models;
 
-class TodoAPI
+use App\Database\DatabaseConnection;
+
+class ToDo
 {
     private $connection;
 
@@ -10,7 +12,7 @@ class TodoAPI
         $this->connection = $connection;
     }
 
-    public function getAllTodos()
+    public function getAll()
     {
         $query = "SELECT * FROM to_do";
         $result = $this->connection->getConnection()->query($query);
@@ -22,77 +24,63 @@ class TodoAPI
             }
         }
 
-        return json_encode($todos);
+        return $todos;
     }
 
-    public function getTodoById($id)
+    public function getById($id)
     {
         try {
             $query = "SELECT * FROM to_do WHERE id = $id";
             $result = $this->connection->getConnection()->query($query);
 
             if ($result->num_rows > 0) {
-                return json_encode($result->fetch_assoc());
+                return $result->fetch_assoc();
             } else {
-                return json_encode(['error' => 'Todo not found']);
+                return ['error' => 'Todo not found'];
             }
-        } catch (ErrorException $th) {
+        } catch (\Throwable $th) {
             echo "Get by id error" . $th->getMessage();
         }
     }
 
-    public function createTodo($data)
+    public function create($data)
     {
         try {
             $nombre = $data['task_name'];
 
             $query = "INSERT INTO to_do (task_name, done) VALUES ('$nombre', 0)";
-
-            var_dump($query);
             $result = $this->connection->getConnection()->query($query);
 
-            if ($result) {
-                return json_encode(['message' => 'Todo created successfully']);
-            } else {
-                return json_encode(['error' => 'Failed to create todo']);
-            }
-        } catch (ErrorException $th) {
+            return $result;
+        } catch (\Throwable $th) {
             echo "Error creating " . $th->getMessage();
         }
     }
 
-    public function updateTodo($id, $data)
+    public function update($id, $data)
     {
         try {
-            var_dump($data);
             $hecha = $data->done ? 1 : 0;
     
             $query = "UPDATE to_do SET done = $hecha WHERE id = $id";
             $result = $this->connection->getConnection()->query($query);
     
-            if ($result) {
-                return json_encode(['message' => 'Todo updated successfully']);
-            } else {
-                return json_encode(['error' => 'Failed to update todo']);
-            }
+            return $result;
         } catch (\Throwable $th) {
             echo "Error updating: " . $th->getMessage();
         }
     }
 
-    public function deleteTodo($id)
+    public function delete($id)
     {
         try {
             $query = "DELETE FROM to_do WHERE id = $id";
             $result = $this->connection->getConnection()->query($query);
 
-            if ($result) {
-                return json_encode(['message' => 'Todo deleted successfully']);
-            } else {
-                return json_encode(['error' => 'Failed to delete todo']);
-            }
+            return $result;
         } catch (\Throwable $th) {
             echo 'Error deleting ' . $th->getMessage();
         }
     }
 }
+?>
